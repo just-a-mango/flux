@@ -1,0 +1,22 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup C/C++ Compiler
+        uses: rlalik/setup-cpp-compiler@v1.1
+        with:
+          compiler: gcc-latest
+      - name: Build Flux
+        run: ./build
