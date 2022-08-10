@@ -19,4 +19,4 @@ jobs:
         with:
           compiler: gcc-latest
       - name: Build Flux
-        run: gcc -xc++ -lstdc++ -shared-libgcc flux.cpp -o flux -Ofast -Wall -Wextra -Wno-multichar -Wno-overflow
+        run: g++ flux.cpp -o flux -Ofast -Wall -Wextra -Wno-multichar -Wno-overflow
