@@ -40,7 +40,7 @@ flux <file> -> windows/linux
 
 ## 📚 Documentation
   As Flux is still very early, documentation might change later in the future.
-  For now, you can find the documentation [here](https://flux.just-a-mango.github.io/wiki).
+  For now, you can find the documentation [here](https://github.com/just-a-mango/flux/blob/54d07fd07d359f3f0f0232120adde8be6b77b7da/docs/documentation.md).
 
 ## 🤝 Contributing
 
