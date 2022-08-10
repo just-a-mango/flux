@@ -11,9 +11,9 @@
 #include <chrono>
 using namespace std;
 
-string lines[1] = { "declare my_var = test" };
 vector<tuple<string,string>> vars;
 vector<tuple<int,vector<string>>> lists;
+int curren_line = 0;
 
 /**
  * It prints out an error message and exits the program
@@ -21,7 +21,7 @@ vector<tuple<int,vector<string>>> lists;
  * @param message The error message to be displayed.
  */
 void error(string message) {
-    std::cout << "        \033[1m\033[91m   Flux Error  \033[0m        " << std::endl << "At \033[1m\033[92mline " << "0" << "\033[0m" << std::endl << "\033[1m" << message << "\033[0m" << std::endl;
+    std::cout << "        \033[1m\033[91m   Flux Error  \033[0m        " << std::endl << "At \033[1m\033[92mline " << curren_line << "\033[0m" << std::endl << "\033[1m" << message << "\033[0m" << std::endl;
     exit(EXIT_FAILURE);
 }
 
@@ -93,6 +93,21 @@ void replaceFirst(string& s, const string& toReplace, const string& replaceWith)
     {
         s.replace(pos, toReplace.length(), replaceWith);
     }
+}
+
+
+void replaceLast(string &str, const string &toReplace, const string &replaceWith) 
+{ 
+    // Find last occurence of toReplace in str 
+    size_t pos = str.rfind(toReplace); 
+  
+    // If toReplace is found in str 
+    if (pos != string::npos) 
+    { 
+        // Replace last occurence of toReplace in str 
+        // with replaceWith 
+        str.replace(pos, toReplace.size(), replaceWith); 
+    } 
 }
 
 
@@ -278,6 +293,8 @@ int countMatchInRegex(std::string s, std::string re)
     return std::distance(words_begin, words_end);
 }
 
+
+
 string process_in(string to_process) {
     // Use regex to find out any object properties and replace them
     string in_str = to_process;
@@ -326,19 +343,38 @@ string process_in(string to_process) {
 }
 
 
-
+string process_inline(string to_process) {
+    if (to_process.substr(0, 6) == "usr_in") {
+        // if (__builtin_expect(tokens[1] != "(" && ,0)) {
+        //     error("Bad syntax when calling usr_in function");
+        // }
+        string to_cout = strip(replace(to_process, "usr_in",""));
+        replaceFirst(to_cout, "(","");
+        replaceLast(to_cout, ")","");
+        cout << process_in(to_cout);
+        string input;
+        getline(cin, input);
+        return input;
+    }
+    else {
+        return to_process;
+    }
+}
 
 
 void process(string line) {
     // Splitting the string into tokens.
     vector<string> tokens = split_string(line, ' ');
-    if (tokens[0] == "declare") {
+    if (tokens[0] == "var") {
         /* Declaring a variable and assigning it a value. */
+        if (__builtin_expect(tokens[2] != "=" || tokens[3] == "",0)) {
+            error("Bad syntax when declaring variable");
+        }
         string filtered = line;
-        replaceFirst(filtered, "declare","");
+        replaceFirst(filtered, "var","");
         replaceFirst(filtered, tokens[1], "");
         replaceFirst(filtered, "=", "");
-        filtered = process_in(strip(filtered));
+        filtered = process_in(process_inline(strip(filtered)));
         for (tuple<string, string> &i : vars) {
             if (get<0>(i) == tokens[1]) {
                 get<1>(i) = filtered;
@@ -348,7 +384,10 @@ void process(string line) {
         vars.push_back(make_tuple(tokens[1], strip(filtered)));
     }
     else if (tokens[0] == "print") {
-        cout << process_in(strip(split_string(line, '->')[1])) << endl;
+        if (__builtin_expect(tokens[1] != "->",0)) {
+            error("Bad syntax when declaring variable");
+        }
+        cout << process_in(process_inline(strip(split_string(line, '->')[1]))) << endl;
     }
 }
 
@@ -363,7 +402,10 @@ int main(int argc, char** argv) {
   if (input_file.good()) {
     string line;
     while (getline(input_file, line)) {
-        process(line);
+        curren_line++;
+        if (__builtin_expect(line != "", 1)) {
+            process(line);
+        }
     }
   } else {
     error("Could not open file");
