@@ -46,5 +46,3 @@ flux <file> -> windows/linux
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome !<br/>Feel free to check [issues page](https://github.com/just-a-mango/flux/issues).
-
-***
