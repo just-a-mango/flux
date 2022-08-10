@@ -3,6 +3,7 @@ name: C++ CI
 on:
   paths:
     - 'flux.cpp'
+    - '.github/workflows/main.yml'
 
   workflow_dispatch:
 
