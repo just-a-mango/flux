@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'flux.cpp'
-      - '.github/workflows/main.yml'
+      - '.github/workflows/linux-ci.yml'
 
   workflow_dispatch:
 
@@ -15,9 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup C/C++ Compiler
-        uses: rlalik/setup-cpp-compiler@v1.1
-        with:
-          compiler: gcc-latest
+        run: sudo apt update && sudo apt install g++
       - name: Build Flux
         run: g++ flux.cpp -o flux -Wno-multichar -Wno-overflow
       - name: Upload Build Artifact
