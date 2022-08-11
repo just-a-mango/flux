@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ['windows-latest', 'ubuntu-latest']
 
     steps:
       - uses: actions/checkout@v3
@@ -20,8 +20,13 @@ jobs:
           compiler: gcc-latest
       - name: Build Flux
         run: g++ flux.cpp -o flux -Ofast -Wall -Wextra -Wno-multichar -Wno-overflow
-      - name: Upload a Build Artifact
+      - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: Build artifact
+          name: WINDOWS Build artifact
           path: flux.exe
+      - name: Upload Linux Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: LINUX Build artifact
+          path: flux.out
