@@ -1,0 +1,21 @@
+website:
+- website/**/*
+
+documentation: 
+- docs/**/*
+
+main:
+- flux.cpp
+
+scripts:
+- build-scripts/**/*
+- git-scripts/**/*
+
+legacy:
+- legacy/**/*
+
+readme:
+- README.md
+
+github:
+- .github/**/*
