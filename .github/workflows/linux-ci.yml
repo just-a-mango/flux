@@ -19,7 +19,7 @@ jobs:
         with:
           compiler: gcc-latest
       - name: Build Flux
-        run: g++ flux.cpp -o flux -Ofast -Wall -Wextra -Wno-multichar -Wno-overflow
+        run: g++ flux.cpp -o flux -Wno-multichar -Wno-overflow
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
