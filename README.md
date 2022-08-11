@@ -1,6 +1,7 @@
 <h1 align="center">Welcome to Flux 👋</h1>
 <p>
-  <img alt="Status" src="https://github.com/just-a-mango/flux/actions/workflows/main.yml/badge.svg"/>
+  <img alt="Windows Status" src="https://github.com/just-a-mango/flux/actions/workflows/win-ci.yml/badge.svg"/>
+  <img alt="Linux Status" src="https://github.com/just-a-mango/flux/actions/workflows/linux-ci.yml/badge.svg"/>
   <img alt="Version" src="https://img.shields.io/badge/version-WIP-blue.svg"/>
   <img alt="Language" src="https://img.shields.io/badge/language-C++14-purple.svg"/>
 </p>
