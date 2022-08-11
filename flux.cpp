@@ -152,25 +152,25 @@ string process_property(string obj, string property) {
             return "false";
         }
     } else if (property == "isletters") {
-        if (find_if(obj.begin(), obj.end(), not_fn(function((int(*)(int))isalpha))) != obj.end()) {
-            return "false";
-        } else {
+        if (regex_match(obj, regex("^[A-Za-z]+$"))) {
             return "true";
+        } else {
+            return "false";
         }
     } else if (property == "capitalize") {
         obj[0] = toupper(obj[0]);
         return obj;
     } else if (property == "isuppercase") {
-        if (find_if(obj.begin(), obj.end(), not_fn(function((int(*)(int))isupper))) != obj.end()) {
-            return "false";
-        } else {
+        if (regex_match(obj, regex("^[A-Z]+$"))) {
             return "true";
+        } else {
+            return "false";
         }
     } else if (property == "islowercase") {
-        if (find_if(obj.begin(), obj.end(), not_fn(function((int(*)(int))islower))) != obj.end()) {
-            return "false";
-        } else {
+        if (regex_match(obj, regex("^[a-z]+$"))) {
             return "true";
+        } else {
+            return "false";
         }
     } else if (property == "strip") {
         return strip(obj);
