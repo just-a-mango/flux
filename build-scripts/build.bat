@@ -9,6 +9,5 @@ IF "%1" == "-production" (
 IF "%1" == "" (
    g++ %folder%\flux.cpp -o %folder%\flux.exe -Wno-multichar -Wno-overflow
 )
-echo %folder%
 flux.exe program.flux
 cd %cur%

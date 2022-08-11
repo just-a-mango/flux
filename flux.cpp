@@ -389,6 +389,12 @@ void process(string line) {
         }
         cout << process_in(process_inline(strip(split_string(line, '->')[1]))) << endl;
     }
+    else if (line.substr(0, 6) == "exit()") {
+        exit(0);
+    }
+    else {
+        error("Unknown command");
+    }
 }
 
 
@@ -399,7 +405,7 @@ int main(int argc, char** argv) {
   }
   auto start = chrono::high_resolution_clock::now();
   ifstream input_file(argv[1]);
-  if (input_file.good()) {
+  if (__builtin_expect(input_file.good() && string(argv[1]).substr(string(argv[1]).find_last_of(".") + 1) == "flux", 1)) {
     string line;
     while (getline(input_file, line)) {
         curren_line++;
@@ -408,7 +414,7 @@ int main(int argc, char** argv) {
         }
     }
   } else {
-    error("Could not open file");
+    cout << "\033[31mCould not open file\033[0m" << endl;
   }
   auto stop = chrono::high_resolution_clock::now();
   cout << "Execution time:" <<chrono::duration_cast<chrono::microseconds>(stop - start).count()*0.000001 << " seconds" << endl;
