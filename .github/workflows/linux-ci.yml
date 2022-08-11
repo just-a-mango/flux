@@ -17,7 +17,9 @@ jobs:
       - name: Setup C/C++ Compiler
         run: sudo apt update && sudo apt install g++
       - name: Build Flux
-        run: g++ flux.cpp -o flux -Wno-overflow -Wno-multichar -std=c++14
+        run: 
+          g++ flux.cpp -o flux -Ofast -Wno-overflow -Wno-multichar -std=c++14
+          ls
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
