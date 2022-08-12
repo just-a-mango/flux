@@ -12,6 +12,7 @@
 using namespace std;
 
 vector<tuple<string,string>> vars;
+vector<tuple<string,string,vector<string>>> funcs;
 vector<tuple<int,vector<string>>> lists;
 int curren_line = 0;
 
@@ -187,6 +188,12 @@ string process_property(string obj, string property) {
             }
 	    }
         return obj;
+    } else if (property.substr(0, 7) == "replace") {
+        int first = property.find_first_of('[');
+        int middle = property.find_last_of('%');
+        string one = strip(property.substr(first + 1, middle - first - 1));
+        string two =strip(property.substr(middle + 1, property.find_last_of(']') - middle - 1));
+        return replace(obj, one, two);
     } else if (property == "bold") {
         string bold = "\033[1m";
         return bold.append(obj).append("\033[0m");
@@ -260,6 +267,54 @@ string process_property(string obj, string property) {
     else if (property == "green_bg_bold_underline") {
         string green = "\033[30;42;1;4m";
         return green.append(obj).append("\033[0m");
+    }
+    else if (property == "red_bg_bold_underline") {
+        string red = "\033[30;41;1;4m";
+        return red.append(obj).append("\033[0m");
+    }
+    else if (property == "yellow_bg_bold_underline") {
+        string yellow = "\033[30;43;1;4m";
+        return yellow.append(obj).append("\033[0m");
+    }
+    else if (property == "blue_bg_bold_underline") {
+        string blue = "\033[30;44;1;4m";
+        return blue.append(obj).append("\033[0m");
+    }
+    else if (property == "magenta_bg_bold_underline") {
+        string magenta = "\033[30;45;1;4m";
+        return magenta.append(obj).append("\033[0m");
+    }
+    else if (property == "cyan_bg_bold_underline") {
+        string cyan = "\033[30;46;1;4m";
+        return cyan.append(obj).append("\033[0m");
+    }
+    else if (property == "white_bg_bold_underline_blink") {
+        string white = "\033[30;47;1;4;5m";
+        return white.append(obj).append("\033[0m");
+    }
+    else if (property == "green_bg_bold_underline_blink") {
+        string green = "\033[30;42;1;4;5m";
+        return green.append(obj).append("\033[0m");
+    }
+    else if (property == "red_bg_bold_underline_blink") {
+        string red = "\033[30;41;1;4;5m";
+        return red.append(obj).append("\033[0m");
+    }
+    else if (property == "yellow_bg_bold_underline_blink") {
+        string yellow = "\033[30;43;1;4;5m";
+        return yellow.append(obj).append("\033[0m");
+    }
+    else if (property == "blue_bg_bold_underline_blink") {
+        string blue = "\033[30;44;1;4;5m";
+        return blue.append(obj).append("\033[0m");
+    }
+    else if (property == "magenta_bg_bold_underline_blink") {
+        string magenta = "\033[30;45;1;4;5m";
+        return magenta.append(obj).append("\033[0m");
+    }
+    else if (property == "cyan_bg_bold_underline_blink") {
+        string cyan = "\033[30;46;1;4;5m";
+        return cyan.append(obj).append("\033[0m");
     }
     else if (property.substr(0, 7) == "replace") {
         int first = property.find_first_of('[');

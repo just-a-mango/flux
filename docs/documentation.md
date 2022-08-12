@@ -7,6 +7,7 @@
 ```
 
 All existing properties:
+- ```replace[something%something_else]```: replaces ```something``` with ```something_else``` in the string
 - ```uppercase```: upper case the string
 - ```lowercase```: lower case the string
 - ```isnumbers```: returns ```true``` or ```false``` based on if the string only contains numbers
