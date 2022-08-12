@@ -316,13 +316,6 @@ string process_property(string obj, string property) {
         string cyan = "\033[30;46;1;4;5m";
         return cyan.append(obj).append("\033[0m");
     }
-    else if (property.substr(0, 7) == "replace") {
-        int first = property.find_first_of('[');
-        int middle = property.find_last_of('%');
-        string one = strip(property.substr(first + 1, middle - first - 1));
-        string two =strip(property.substr(middle + 1, property.find_last_of(']') - middle - 1));
-        return replace(obj, one, two);
-    }
     else {
         error(string("Unknown property: ").append(property));
     }
