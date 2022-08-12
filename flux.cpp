@@ -342,6 +342,11 @@ int countMatchInRegex(std::string s, std::string re)
 }
 
 
+string process_funcs(string to_process) {
+    return "";
+}
+
+
 
 string process_in(string to_process) {
     // Use regex to find out any object properties and replace them
@@ -392,21 +397,20 @@ string process_in(string to_process) {
 
 
 string process_inline(string to_process) {
-    if (to_process.substr(0, 6) == "usr_in") {
-        // if (__builtin_expect(tokens[1] != "(" && ,0)) {
-        //     error("Bad syntax when calling usr_in function");
-        // }
-        string to_cout = strip(replace(to_process, "usr_in",""));
-        replaceFirst(to_cout, "(","");
-        replaceLast(to_cout, ")","");
-        cout << process_in(to_cout);
-        string input;
-        getline(cin, input);
-        return input;
-    }
-    else {
-        return to_process;
-    }
+    if (to_process.find("usr_in(") != string::npos) {
+        regex e("usr_in\\([^)]*\\)");
+        for (std::sregex_iterator i = std::sregex_iterator(to_process.begin(), to_process.end(), e); i != std::sregex_iterator(); ++i) {                                        
+            std::string origin_match = smatch(*i).str();
+            string to_cout = strip(replace(origin_match, "usr_in",""));
+            replaceFirst(to_cout, "(","");
+            replaceLast(to_cout, ")","");
+            cout << process_in(to_cout);
+            string input;
+            getline(cin, input);
+            to_process = replace(to_process, origin_match, input);
+        }
+    }   
+    return to_process;
 }
 
 
