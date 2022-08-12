@@ -2,8 +2,8 @@
 #include <string>
 #include <algorithm>
 #include <tuple>
+#include <fstream>
 #include <vector>
-#include<bits/stdc++.h>
 #include <cctype>
 #include <functional>
 #include <regex>
@@ -15,6 +15,8 @@ vector<tuple<string,string>> vars;
 vector<tuple<string,string,vector<string>>> funcs;
 vector<tuple<int,vector<string>>> lists;
 int curren_line = 0;
+
+
 
 /**
  * It prints out an error message and exits the program
@@ -97,6 +99,14 @@ void replaceFirst(string& s, const string& toReplace, const string& replaceWith)
 }
 
 
+/**
+ * It finds the last occurrence of the string toReplace in the string str and replaces it with the
+ * string replaceWith
+ * 
+ * @param str The string in which we want to replace the last occurrence of toReplace with replaceWith.
+ * @param toReplace The string to be replaced
+ * @param replaceWith The string that will replace the last occurrence of toReplace in str.
+ */
 void replaceLast(string &str, const string &toReplace, const string &replaceWith) 
 { 
     // Find last occurence of toReplace in str 
@@ -414,6 +424,13 @@ string process_inline(string to_process) {
 }
 
 
+/**
+ * It takes a string, splits it into tokens, and then processes the tokens
+ * 
+ * @param line The line of code to process.
+ * 
+ * @return a string.
+ */
 void process(string line) {
     // Splitting the string into tokens.
     vector<string> tokens = split_string(line, ' ');
@@ -451,6 +468,14 @@ void process(string line) {
 
 
 
+/**
+ * It takes a string, and if it's not empty, it processes it
+ * 
+ * @param argc The number of arguments passed to the program
+ * @param argv The arguments passed to the program.
+ * 
+ * @return The return value of the function.
+ */
 int main(int argc, char** argv) {
   if (argc < 2) {
     return 0;
