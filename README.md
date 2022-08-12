@@ -18,7 +18,18 @@ An easy-to-use work-in-progress programming language written in C++
 [//]: # (This is Bionic Reading, I used it because I find it honestly boring spending as much as 20s reading this detailed description and story of Flux)
 **Mos**k **wa**s **fir**st **writt**en **i**n **Pyth**on, **jus**t **lik**e **m**y **ver**y **fir**st **programmi**ng **langua**ge **Man**go. **Aft**er **som**e **tim**e **an**d **evaluati**on, I **decid**ed **no**t **t**o **us**e **Pyth**on **anymo**re **fo**r **thi**s **proje**ct **becau**se **o**f **it**s **performan**ce **an**d **hig**h-**lev**el **limitatio**ns, **an**d **t**o **us**e C++ **inste**ad. C++ **developme**nt **i**s **slow**er **becau**se I **a**m **muc**h **les**s **experienc**ed, **bu**t **loo**ks **ver**y **promisi**ng, **wit**h **astonishi**ng **performan**ce **a**t **th**e **mome**nt. **Havi**ng **tha**t **sai**d, a **worki**ng **relea**se **o**f **Flu**x **is**n't **excpect**ed **befo**re **qui**te **som**e **tim**e..
 
+
+## ⬇️ Downloading and installing
+
+Head over to the ['Actions'](https://github.com/just-a-mango/flux/actions) tab of this repository. Select the latest Windows/Linux CI action (depending on your OS) and click on the 'Artifacts'. Download the .zip file and extract its content somewhere you'd like Flux to be installed. Optionally, add this folder to the PATH system variable so you can run it anywhere, and you're done.
+To run it, simply do:
+```sh
+flux(.exe/.out, depends on your OS) <flux file>
+```
+
+
 ## 🚀 Building and running
+**This part is only recommended to those who have cloned this repository**
 
 **Build and run**:
 
