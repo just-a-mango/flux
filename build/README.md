@@ -1,0 +1,2 @@
+### Note:
+Those scripts are used during the development because they help speed up testing, and they are made to stay in the same directory as every other file in this repository, because that's how they were 'developed'. You could potentially adapt them to your own folder structure though.
