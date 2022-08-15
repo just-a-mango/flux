@@ -12,7 +12,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<tuple<string,string>> vars;
+vector<tuple<string, string>> vars;
 vector<tuple<string,string,vector<string>>> funcs;
 vector<tuple<int,vector<string>>> lists;
 int curren_line = 0;

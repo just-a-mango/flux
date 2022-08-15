@@ -17,5 +17,8 @@
   "author": "Just_a_Mango",
   "devDependencies": {
     "electron": "^20.0.1"
+  },
+  "dependencies": {
+    "got": "^11.8.5"
   }
 }
