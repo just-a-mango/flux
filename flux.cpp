@@ -9,6 +9,7 @@
 #include <regex>
 #include <sstream>
 #include <chrono>
+#include <bits/stdc++.h>
 using namespace std;
 
 vector<tuple<string,string>> vars;
@@ -140,6 +141,23 @@ vector<string> split_string(const string &str, char delimiter) {
     return result;
 }
 
+
+int maxParenthesesDepth(string& s) {
+    unsigned int count = 0;
+    stack<int> st;
+    for (unsigned int i = 0; i < s.size(); ++i) {
+        if (__builtin_expect(s[i] == '(', 0)) {
+            st.push(i);
+        } else if (__builtin_expect(s[i] == ')', 0)) {
+            if (count < st.size()) {
+                count = st.size();
+            }
+
+        }
+    }
+    return count;
+
+}
 
 /**
  * It takes a string and a property, and returns the string with the property applied to it
@@ -352,18 +370,11 @@ int countMatchInRegex(std::string s, std::string re)
 }
 
 
-string process_funcs(string to_process) {
-    return "";
-}
-
-
-
 string process_in(string to_process) {
     // Use regex to find out any object properties and replace them
     string in_str = to_process;
     if (in_str.find("(") != string::npos) {
-        int match_count = countMatchInRegex(in_str, "\\([^ ()]*\\.[^ ()]*\\)");
-        for (int i = 0; i < match_count; ++i) {
+        for (int i = 0; i < (maxParenthesesDepth(in_str) * countMatchInRegex(in_str, "\\([^ ()]*\\.[^ ()]*\\)"))+1; ++i) {
             regex r("\\([^ ()]*\\.[^ ()]*\\)");
             smatch m;
             regex_search(in_str, m, r);
@@ -373,6 +384,7 @@ string process_in(string to_process) {
             obj = obj.substr(0, obj.find("."));
             in_str = replace(in_str, m.str(), process_property(obj, property));
         }
+        
     }
     for (auto i : vars) {
         if (in_str.substr(0, 5) == "(var)") {
