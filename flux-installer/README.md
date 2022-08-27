@@ -1,2 +1,0 @@
-### Note:
-Both of these installers are in a very early state and are not planned to release in a stable state before quite some time, due to the amount of work required to develop them in parallel with Flux.
