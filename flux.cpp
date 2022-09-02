@@ -146,9 +146,9 @@ int maxParenthesesDepth(string& s) {
     unsigned int count = 0;
     stack<int> st;
     for (unsigned int i = 0; i < s.size(); ++i) {
-        if (__builtin_expect(s[i] == '(', 0)) {
+        if (s[i] == '(') {
             st.push(i);
-        } else if (__builtin_expect(s[i] == ')', 0)) {
+        } else if (s[i] == ')') {
             if (count < st.size()) {
                 count = st.size();
             }
@@ -374,17 +374,19 @@ string process_in(string to_process) {
     // Use regex to find out any object properties and replace them
     string in_str = to_process;
     if (in_str.find("(") != string::npos) {
-        for (int i = 0; i < (maxParenthesesDepth(in_str) * countMatchInRegex(in_str, "\\([^ ()]*\\.[^ ()]*\\)"))+1; ++i) {
+        unsigned int num = (maxParenthesesDepth(in_str) * countMatchInRegex(in_str, "\\([^ ()]*\\.[^ ()]*\\)"))+1;
+        for (int i = 0; i < num; ++i) {
             regex r("\\([^ ()]*\\.[^ ()]*\\)");
             smatch m;
             regex_search(in_str, m, r);
             string obj = m.str();
-            obj = obj.substr(1, obj.length() - 2);
-            string property = obj.substr(obj.find(".") + 1);
-            obj = obj.substr(0, obj.find("."));
-            in_str = replace(in_str, m.str(), process_property(obj, property));
+            if (__builtin_expect(obj.length() != 0, 1)) {
+                obj = obj.substr(1, obj.length() - 2);
+                string property = obj.substr(obj.find(".") + 1);
+                obj = obj.substr(0, obj.find("."));
+                in_str = replace(in_str, m.str(), process_property(obj, property));
+            }
         }
-        
     }
     for (auto i : vars) {
         if (in_str.substr(0, 5) == "(var)") {
