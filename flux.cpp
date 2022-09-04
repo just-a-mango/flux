@@ -5,11 +5,8 @@
 #include <fstream>
 #include <vector>
 #include <cctype>
-#include <functional>
 #include <regex>
-#include <sstream>
 #include <chrono>
-#include <bits/stdc++.h>
 using namespace std;
 
 vector<tuple<string, string>> vars;
@@ -142,6 +139,16 @@ vector<string> split_string(const string &str, char delimiter) {
 }
 
 
+/**
+ * 1. Use a stack to keep track of the indices of the opening parentheses.
+ * 2. Push the index of the opening parentheses onto the stack.
+ * 3. When closing parentheses are encountered, pop the top of the stack.
+ * 4. The size of the stack is the depth of the parentheses.
+ * 5. Keep track of the maximum depth of the parentheses.
+ *
+ * @param s the string to be checked
+ * @return The maximum depth of parentheses in the string.
+ */
 int maxParenthesesDepth(string& s) {
     unsigned int count = 0;
     stack<int> st;
@@ -152,15 +159,14 @@ int maxParenthesesDepth(string& s) {
             if (count < st.size()) {
                 count = st.size();
             }
-
         }
     }
     return count;
-
 }
 
+/* It parses math expressions. */
 class MathParser {
-    // Thank you Henrik for the math parser! https://stackoverflow.com/users/148897/henrik
+    // Thank you, Henrik, for the math parser! https://stackoverflow.com/users/148897/henrik
     public:
         string in = "";
         const char * exp = &in[0];
@@ -508,7 +514,6 @@ string process_inline(string to_process) {
  * It takes a string, splits it into tokens, and then processes the tokens
  * 
  * @param line The line of code to process.
- * 
  * @return a string.
  */
 void process(string line) {
