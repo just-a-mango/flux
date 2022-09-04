@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <tuple>
 #include <fstream>
+#include <utility>
 #include <vector>
 #include <cctype>
 #include <regex>
@@ -21,7 +22,7 @@ int curren_line = 0;
  * 
  * @param message The error message to be displayed.
  */
-void error(string message) {
+void error(const string& message) {
     std::cout << "        \033[1m\033[91m   Flux Error  \033[0m        " << std::endl << "At \033[1m\033[92mline " << curren_line << "\033[0m" << std::endl << "\033[1m" << message << "\033[0m" << std::endl;
     exit(EXIT_FAILURE);
 }
@@ -34,9 +35,8 @@ void error(string message) {
  * 
  * @return Nothing.
  */
-void print(string to_print) {
+void print(const string& to_print) {
     cout << to_print << endl;
-    return;
 }
 
 
@@ -107,13 +107,13 @@ void replaceFirst(string& s, const string& toReplace, const string& replaceWith)
  */
 void replaceLast(string &str, const string &toReplace, const string &replaceWith) 
 { 
-    // Find last occurence of toReplace in str 
+    // Find last occurrence of toReplace in str
     size_t pos = str.rfind(toReplace); 
   
     // If toReplace is found in str 
     if (pos != string::npos) 
     { 
-        // Replace last occurence of toReplace in str 
+        // Replace last occurrence of toReplace in str
         // with replaceWith 
         str.replace(pos, toReplace.size(), replaceWith); 
     } 
@@ -168,9 +168,9 @@ int maxParenthesesDepth(string& s) {
 class MathParser {
     // Thank you, Henrik, for the math parser! https://stackoverflow.com/users/148897/henrik
     public:
-        string in = "";
+        string in;
         const char * exp = &in[0];
-        char peek()
+        char peek() const
         {
             return *exp;
         }
@@ -235,7 +235,7 @@ class MathParser {
  * 
  * @return The return value is the string that is being processed.
  */
-string process_property(string obj, string property) {
+string process_property(string obj, const string& property) {
     if (property == "uppercase") {
         for (auto & c: obj) c = (char)toupper(c);
         return obj;
@@ -427,7 +427,7 @@ string process_property(string obj, string property) {
  * 
  * @return The number of matches in the string.
  */
-int countMatchInRegex(std::string s, std::string re)
+int countMatchInRegex(std::string s, const std::string& re)
 {
     std::regex words_regex(re);
     auto words_begin = std::sregex_iterator(
@@ -438,6 +438,14 @@ int countMatchInRegex(std::string s, std::string re)
 }
 
 
+/**
+ * It takes a string, finds all instances of `(math:<math expression>)` and replaces them with the result of the math
+ * expression
+ *
+ * @param s The string to process
+ *
+ * @return The string with the math expressions replaced with the result of the math expression.
+ */
 string process_math(string s) {
     std::regex r(R"(\(math:([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\))");
     MathParser parser;
@@ -445,7 +453,7 @@ string process_math(string s) {
         i != std::sregex_iterator();
         ++i )
     {
-        std::smatch m = *i;
+        const std::smatch& m = *i;
         string original_match = m.str();
         string match = m.str();
         replaceFirst(match, "(math:","");
@@ -458,38 +466,39 @@ string process_math(string s) {
 
 string process_in(string to_process) {
     // Use regex to find out any object properties and replace them
-    string in_str = to_process;
+    string in_str = std::move(to_process);
+    for (auto i : vars) {
+        if (in_str.substr(0, 5) == "(var)") {
+            string temp_var = in_str;
+            size_t pos = 0;
+            while ((pos = temp_var.find("(var)", pos)) != string::npos) {
+                temp_var.replace(pos, string("(var)").length(), "");
+                pos += string("").length();
+            }
+            if (temp_var == get<0>(i)) {
+                in_str = replace(replace(in_str, "(var)",""), get<0>(i), get<1>(i));
+            }
+        }
+    }
     in_str = process_math(in_str);
-    if (in_str.find("(") != string::npos) {
-        unsigned int num = (maxParenthesesDepth(in_str) * countMatchInRegex(in_str, "\\([^ ()]*\\.[^ ()]*\\)"))+1;
+    if (in_str.find('(') != string::npos) {
+        unsigned int num = (maxParenthesesDepth(in_str) * countMatchInRegex(in_str, R"(\([^ ()]*\.[^ ()]*\))"))+1;
         for (int i = 0; i < num; ++i) {
-            regex r("\\([^ ()]*\\.[^ ()]*\\)");
+            regex r(R"(\([^ ()]*\.[^ ()]*\))");
             smatch m;
             regex_search(in_str, m, r);
             string obj = m.str();
             if (__builtin_expect(obj.length() != 0, 1)) {
                 obj = obj.substr(1, obj.length() - 2);
-                string property = obj.substr(obj.find(".") + 1);
-                obj = obj.substr(0, obj.find("."));
+                string property = obj.substr(obj.find('.') + 1);
+                obj = obj.substr(0, obj.find('.'));
                 in_str = replace(in_str, m.str(), process_property(obj, property));
             }
         }
     }
-    for (auto i : vars) {
-        if (in_str.substr(0, 5) == "(var)") {
-            string var_test = in_str;
-            size_t pos = 0;
-            while ((pos = var_test.find("(var)", pos)) != string::npos) {
-                var_test.replace(pos, string("(var)").length(), "");
-                pos += string("").length();
-            }
-            if (var_test == get<0>(i)) {
-                in_str = replace(replace(in_str, "(var)",""), get<0>(i), get<1>(i));
-            }
-            }
-    }
-    if (in_str.find("+") != string::npos) {
-        for (auto i : split_string(in_str, '+')) {
+
+    if (in_str.find('+') != string::npos) {
+        for (const auto& i : split_string(in_str, '+')) {
             if (strip(i).substr(0, 5) == "(var)") {
                 for (auto j : vars) {
                     if (replace(strip(i), "(var)","") == get<0>(j)) {
@@ -531,12 +540,12 @@ string process_inline(string to_process) {
  * @param line The line of code to process.
  * @return a string.
  */
-void process(string line) {
+void process(const string& line) {
     // Splitting the string into tokens.
     vector<string> tokens = split_string(line, ' ');
     if (tokens[0] == "var") {
         /* Declaring a variable and assigning it a value. */
-        if (__builtin_expect(tokens[2] != "=" || tokens[3] == "",0)) {
+        if (__builtin_expect(tokens[2] != "=" || tokens[3].empty(),0)) {
             error("Bad syntax when declaring variable");
         }
         string filtered = line;
@@ -550,7 +559,7 @@ void process(string line) {
                 return;
             }
         }
-        vars.push_back(make_tuple(tokens[1], strip(filtered)));
+        vars.emplace_back(tokens[1], strip(filtered));
     }
     else if (tokens[0] == "print") {
         if (__builtin_expect(tokens[1] != "->",0)) {
@@ -586,7 +595,7 @@ int main(int argc, char** argv) {
     string line;
     while (getline(input_file, line)) {
         curren_line++;
-        if (__builtin_expect(line != "", 1)) {
+        if (__builtin_expect(!line.empty(), 1)) {
             process(line);
         }
     }
