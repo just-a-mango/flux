@@ -438,13 +438,28 @@ int countMatchInRegex(std::string s, std::string re)
 }
 
 
-string process_and_recognize_math(string to_process) {
-
+string process_math(string s) {
+    std::regex r(R"(\(math:([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\))");
+    MathParser parser;
+    for(std::sregex_iterator i = std::sregex_iterator(s.begin(), s.end(), r);
+        i != std::sregex_iterator();
+        ++i )
+    {
+        std::smatch m = *i;
+        string original_match = m.str();
+        string match = m.str();
+        replaceFirst(match, "(math:","");
+        replaceLast(match, ")","");
+        parser.in = match;
+        replaceFirst(s, original_match, to_string(parser.expression()));
+    }
+    return s;
 }
 
 string process_in(string to_process) {
     // Use regex to find out any object properties and replace them
     string in_str = to_process;
+    in_str = process_math(in_str);
     if (in_str.find("(") != string::npos) {
         unsigned int num = (maxParenthesesDepth(in_str) * countMatchInRegex(in_str, "\\([^ ()]*\\.[^ ()]*\\)"))+1;
         for (int i = 0; i < num; ++i) {
