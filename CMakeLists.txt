@@ -3,5 +3,4 @@ project(flux)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(flux
-        flux.cpp)
+add_executable(flux flux.cpp)
