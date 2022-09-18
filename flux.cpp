@@ -55,7 +55,7 @@ string strip(const string &input)
         ++start_it;
     while (std::isspace(*end_it))
         ++end_it;
-    return string(start_it, end_it.base());
+    return {start_it, end_it.base()};
 }
 
 
@@ -149,9 +149,9 @@ vector<string> split_string(const string &str, char delimiter) {
  * @param s the string to be checked
  * @return The maximum depth of parentheses in the string.
  */
-int maxParenthesesDepth(string& s) {
+unsigned int maxParenthesesDepth(string& s) {
     unsigned int count = 0;
-    stack<int> st;
+    stack<unsigned int> st;
     for (unsigned int i = 0; i < s.size(); ++i) {
         if (s[i] == '(') {
             st.push(i);
@@ -480,10 +480,10 @@ string process_in(string to_process) {
             }
         }
     }
-    in_str = process_math(in_str);
     if (in_str.find('(') != string::npos) {
+        in_str = process_math(in_str);
         unsigned int num = (maxParenthesesDepth(in_str) * countMatchInRegex(in_str, R"(\([^ ()]*\.[^ ()]*\))"))+1;
-        for (int i = 0; i < num; ++i) {
+        for (unsigned int i = 0; i < num; ++i) {
             regex r(R"(\([^ ()]*\.[^ ()]*\))");
             smatch m;
             regex_search(in_str, m, r);
