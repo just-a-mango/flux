@@ -53,7 +53,7 @@ flux <file> -> windows/linux
 
 ## 📚 Documentation
   As Flux is still very early, documentation might change later in the future.
-  For now, you can find the documentation [here](https://github.com/just-a-mango/flux/blob/54d07fd07d359f3f0f0232120adde8be6b77b7da/docs/documentation.md), and you can find a list of everything that doesn't currently work [here](https://github.com/just-a-mango/flux/blob/54d07fd07d359f3f0f0232120adde8be6b77b7da/docs/not-work.md)
+  For now, you can find the documentation [here](https://github.com/just-a-mango/flux/blob/54d07fd07d359f3f0f0232120adde8be6b77b7da/docs/documentation.md), and you can find a list of everything that doesn't currently work [here](https://github.com/just-a-mango/flux/wiki/What-doesn't-work-yet)
 
 ## 🤝 Contributing
 
