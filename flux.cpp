@@ -111,7 +111,7 @@ void replaceLast(string &str, const string &toReplace, const string &replaceWith
     size_t pos = str.rfind(toReplace); 
   
     // If toReplace is found in str 
-    if (pos != string::npos) 
+    if (__builtin_expect(pos != string::npos, 1))
     { 
         // Replace last occurrence of toReplace in str
         // with replaceWith 
@@ -586,7 +586,8 @@ void process(const string& line) {
  * @return The return value of the function.
  */
 int main(int argc, char** argv) {
-  if (argc < 2) {
+  if (__builtin_expect(argc < 2, 0)) {
+      cout << "Flux - WIP programming language" << endl;
     return 0;
   }
   auto start = chrono::high_resolution_clock::now();
