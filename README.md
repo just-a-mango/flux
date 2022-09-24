@@ -20,7 +20,7 @@ An easy-to-use work-in-progress programming language written in C++
 
 
 ## ⬇️ Downloading and installing
-
+### // DOESN'T WORK - USE CMAKE INSTEAD
 Head over to the ['Actions'](https://github.com/just-a-mango/flux/actions) tab of this repository. Select the latest Windows/Linux CI action (depending on your OS) and click on the 'Artifacts'. Download the .zip file and extract its content somewhere you'd like Flux to be installed. Optionally, add this folder to the PATH system variable so you can run it anywhere, and you're done.
 To run it, simply do:
 ```sh
@@ -29,6 +29,7 @@ flux(.exe/.out, depends on your OS) <flux file>
 
 
 ## 🚀 Building and running
+### // DOESN'T WORK - USE CMAKE INSTEAD
 **This part is only recommended to those who have cloned this repository**
 
 **Build and run**:
