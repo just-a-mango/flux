@@ -591,7 +591,7 @@ int main(int argc, char** argv) {
   }
   auto start = chrono::high_resolution_clock::now();
   ifstream input_file(argv[1]);
-  if (__builtin_expect(input_file.good() && string(argv[1]).substr(string(argv[1]).find_last_of(".") + 1) == "flux", 1)) {
+  if (__builtin_expect(input_file.good() && string(argv[1]).substr(string(argv[1]).find_last_of('.') + 1) == "flux", 1)) {
     string line;
     while (getline(input_file, line)) {
         curren_line++;
