@@ -13,7 +13,7 @@ using namespace std;
 vector<tuple<string, string>> vars;
 vector<tuple<string,string,vector<string>>> funcs;
 vector<tuple<int,vector<string>>> lists;
-int curren_line = 0;
+int current_line = 0;
 
 
 
@@ -23,7 +23,7 @@ int curren_line = 0;
  * @param message The error message to be displayed.
  */
 void error(const string& message) {
-    std::cout << "        \033[1m\033[91m   Flux Error  \033[0m        " << std::endl << "At \033[1m\033[92mline " << curren_line << "\033[0m" << std::endl << "\033[1m" << message << "\033[0m" << std::endl;
+    std::cout << "        \033[1m\033[91m   Flux Error  \033[0m        " << std::endl << "At \033[1m\033[92mline " << current_line << "\033[0m" << std::endl << "\033[1m" << message << "\033[0m" << std::endl;
     exit(EXIT_FAILURE);
 }
 
@@ -131,10 +131,9 @@ void replaceLast(string &str, const string &toReplace, const string &replaceWith
 vector<string> split_string(const string &str, char delimiter) {
     vector<string> result;
     istringstream iss(str);
-
-    for (string token; getline(iss, token, delimiter);)
+    for (string token; getline(iss, token, delimiter);) {
         result.push_back(token);
-
+    }
     return result;
 }
 
@@ -178,9 +177,9 @@ class MathParser {
         {
             return *exp++;
         }
-        int expression()
+        float expression()
         {
-            int result = term();
+            float result = term();
             while (peek() == '+' || peek() == '-')
                 if (get() == '+')
                     result += term();
@@ -188,23 +187,23 @@ class MathParser {
                     result -= term();
             return result;
         }
-        int number()
+        float number()
         {
-            int result = get() - '0';
+            float result = get() - '0';
             while (peek() >= '0' && peek() <= '9')
             {
                 result = 10*result + get() - '0';
             }
             return result;
         }
-        int factor()
+        float factor()
         {
             if (peek() >= '0' && peek() <= '9')
                 return number();
             else if (peek() == '(')
             {
                 get();
-                int result = expression();
+                float result = expression();
                 get();
                 return result;
             }
@@ -215,9 +214,9 @@ class MathParser {
             }
             return 0;
         }
-        int term()
+        float term()
         {
-            int result = factor();
+            float result = factor();
             while (peek() == '*' || peek() == '/')
                 if (get() == '*')
                     result *= factor();
@@ -459,7 +458,9 @@ string process_math(string s) {
         replaceFirst(match, "(math:","");
         replaceLast(match, ")","");
         parser.in = match;
-        replaceFirst(s, original_match, to_string(parser.expression()));
+        string expression_result = to_string(parser.expression());
+        expression_result.erase(expression_result.find_last_not_of('0') + 1, std::string::npos);
+        replaceFirst(s, original_match, expression_result);
     }
     return s;
 }
@@ -521,10 +522,10 @@ string process_inline(string to_process) {
         regex e("usr_in\\([^)]*\\)");
         for (std::sregex_iterator i = std::sregex_iterator(to_process.begin(), to_process.end(), e); i != std::sregex_iterator(); ++i) {                                        
             std::string origin_match = smatch(*i).str();
-            string to_cout = strip(replace(origin_match, "usr_in",""));
-            replaceFirst(to_cout, "(","");
-            replaceLast(to_cout, ")","");
-            cout << process_in(to_cout);
+            string out = strip(replace(origin_match, "usr_in",""));
+            replaceFirst(out, "(","");
+            replaceLast(out, ")","");
+            cout << process_in(out);
             string input;
             getline(cin, input);
             to_process = replace(to_process, origin_match, input);
@@ -538,7 +539,6 @@ string process_inline(string to_process) {
  * It takes a string, splits it into tokens, and then processes the tokens
  * 
  * @param line The line of code to process.
- * @return a string.
  */
 void process(const string& line) {
     // Splitting the string into tokens.
@@ -595,7 +595,7 @@ int main(int argc, char** argv) {
   if (__builtin_expect(input_file.good() && string(argv[1]).substr(string(argv[1]).find_last_of('.') + 1) == "flux", 1)) {
     string line;
     while (getline(input_file, line)) {
-        curren_line++;
+        current_line++;
         if (__builtin_expect(!line.empty(), 1)) {
             process(line);
         }
