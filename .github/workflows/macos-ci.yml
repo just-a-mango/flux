@@ -1,0 +1,25 @@
+name: Linux CI
+
+on:
+  push:
+    paths:
+      - 'flux.cpp'
+      - '.github/workflows/linux-ci.yml'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup C/C++ Compiler
+        run: sudo apt update && sudo apt install g++
+      - name: Build Flux
+        run: g++ flux.cpp -o flux.out -Ofast -Wno-overflow -Wno-multichar -std=c++14
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: Build artifact
+          path: flux.out
